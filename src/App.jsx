@@ -1,18 +1,25 @@
-import { useRoutes } from 'react-router-dom';
-import ShowCreators from './pages/ShowCreators';
-import ViewCreator from './pages/ViewCreator';
-import EditCreator from './pages/EditCreator';
-import AddCreator from './pages/AddCreator';
+import React from "react";
+import { useRoutes, BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
-  let element = useRoutes([
-    { path: "/", element: <ShowCreators /> },
-    { path: "/view/:id", element: <ViewCreator /> },
-    { path: "/edit/:id", element: <EditCreator /> },
-    { path: "/new", element: <AddCreator /> },
-  ]);
+import ShowCreators from "./pages/ShowCreators";
+import AddCreator from "./pages/AddCreator";
+import EditCreator from "./pages/EditCreator";
+import ViewCreator from "./pages/ViewCreator";
+import "./App.css";
 
-  return <div className="App">{element}</div>;
+
+  function App() {
+  return (
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<ViewCreator/>}/>
+        <Route path="/creators" element={<ViewCreator/>}/>
+        <Route path="/creator/:id" element={<ShowCreators/>}/>
+        <Route path="/add" element={<AddCreator/>}/>
+        <Route path="/edit/:id" element={<EditCreator/>}/>
+      </Routes>
+    </div>
+  );
 }
 
 export default App;

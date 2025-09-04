@@ -1,56 +1,116 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "../client";
-import ContentCreator from "../components/ContentCreator";
-import { Link } from "react-router-dom";
+import { FaYoutube, FaTwitter, FaInstagram, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 
 const ShowCreators = () => {
-  const [creators, setCreators] = useState([]);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [creator, setCreator] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCreators = async () => {
+    const fetchCreator = async () => {
       try {
-        let { data, error } = await supabase.from("creators").select("*");
-        if (error) throw error;
-        setCreators(data);
+        const { data, error } = await supabase
+          .from("creators")
+          .select()
+          .eq("id", id)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          setCreator(data);
+          setError(null);
+        } else {
+          setError("Creator not found.");
+        }
+       
       } catch (err) {
-        console.error("Error fetching creators:", err.message);
+        console.error("Error fetching creator:", err.message);
+        setError("Failed to load creator data. Please check the ID.");
       } finally {
         setLoading(false);
       }
     };
-    fetchCreators();
-  }, []);
+    fetchCreator();
+  }, [id]);
 
-  if (loading) return <p className="text-center mt-10">Loading creators...</p>;
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this creator?")) return;
+
+    try {
+      const { error } = await supabase
+        .from("creators")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        throw error;
+      }
+
+      navigate("/");
+    } catch (err) {
+      console.error("Error deleting creator:", err.message);
+      alert("Failed to delete creator.");
+    }
+  };
+
+  if (loading) {
+    return <p className="text-center mt-10 text-white text-xl">Loading creator...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center mt-10 text-red-500 text-xl">{error}</p>;
+  }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">💫 Creatorverse</h1>
-        <Link to="/new">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">
-            ➕ Add Creator
-          </button>
-        </Link>
-      </div>
-
-      {creators.length === 0 ? (
-        <p className="text-center text-gray-500">No content creators found.</p>
-      ) : (
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-          {creators.map((creator) => (
-            <ContentCreator
-              key={creator.id}
-              id={creator.id}
-              name={creator.name}
-              url={creator.url}
-              description={creator.description}
-              imageURL={creator.imageURL}
-            />
-          ))}
+    <div className="show-creator-page">
+      <div className="creator-details-container">
+        <img
+          src={creator.imageURL || 'https://via.placeholder.com/200x200.png?text=No+Image'}
+          alt={creator.name}
+        />
+        <div className="creator-details-content">
+          <h1>{creator.name}</h1>
+          <p>{creator.description}</p>
+          <div className="creator-details-links">
+            {creator.youtubeURL && (
+              <a href={creator.youtubeURL} target="_blank" rel="noopener noreferrer">
+                <FaYoutube /> @thekoreanvegan
+              </a>
+            )}
+            {creator.twitterURL && (
+              <a href={creator.twitterURL} target="_blank" rel="noopener noreferrer">
+                <FaTwitter /> @thekoreanvegan
+              </a>
+            )}
+            {creator.instagramURL && (
+              <a href={creator.instagramURL} target="_blank" rel="noopener noreferrer">
+                <FaInstagram /> @thekoreanvegan
+              </a>
+            )}
+          </div>
+          <div className="creator-details-actions">
+            <Link
+              to={`/edit/${id}`}
+              className="edit-button"
+            >
+              <FaPencilAlt /> Edit
+            </Link>
+            <button
+              onClick={handleDelete}
+              className="delete-button"
+            >
+              <FaTrashAlt /> Delete
+            </button>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

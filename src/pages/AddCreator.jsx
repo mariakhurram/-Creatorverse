@@ -7,6 +7,8 @@ const AddCreator = () => {
   const [formData, setFormData] = useState({
     name: "",
     url: "",
+    twitterURL: "",
+    instagramURL: "",
     description: "",
     imageURL: "",
   });
@@ -20,69 +22,91 @@ const AddCreator = () => {
     e.preventDefault();
 
     try {
-      const { error } = await supabase
-        .from("creators") 
-        .insert([formData]);
+      const { data, error } = await supabase
+        .from("creators")
+        .insert([formData])
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
+      console.log('Creator added:', data);
       alert("Creator added successfully!");
-      navigate("/"); 
+      navigate("/");
     } catch (err) {
       console.error("Error adding creator:", err.message);
+      alert("Failed to add creator. Check the console for details.");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="creator-form-page">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md"
+        className="creator-form"
       >
-        <h2 className="text-xl font-bold mb-4">Add a New Creator</h2>
+        <h2>Add a New Creator</h2>
 
-        <input
-          type="int"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 mb-3 rounded"
-        />
+        <div className="form-group">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            placeholder="The Korean Vegan"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <input
-          type="varchar"
-          name="url"
-          placeholder="URL"
-          value={formData.url}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 mb-3 rounded"
-        />
+        <div className="form-group">
+          <label>Description</label>
+          <textarea
+            name="description"
+            placeholder="Provide a description of the creator."
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 mb-3 rounded"
-        />
+        <div className="form-group">
+          <label>Image URL</label>
+          <input
+            type="url"
+            name="imageURL"
+            placeholder="https://via.placeholder.com/150"
+            value={formData.imageURL}
+            onChange={handleChange}
+          />
+        </div>
 
-        <input
-          type="text"
-          name="imageURL"
-          placeholder="Image URL (optional)"
-          value={formData.imageURL}
-          onChange={handleChange}
-          className="w-full border p-2 mb-3 rounded"
-        />
+        <h3>Social Media Links</h3>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-        >
+        <div className="form-group">
+          <label>Twitter URL</label>
+          <input
+            type="url"
+            name="twitterURL"
+            placeholder="https://twitter.com/thekoreanvegan"
+            value={formData.twitterURL}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Instagram URL</label>
+          <input
+            type="url"
+            name="instagramURL"
+            placeholder="https://instagram.com/thekoreanvegan"
+            value={formData.instagramURL}
+            onChange={handleChange}
+          />
+        </div>
+
+        <button type="submit" className="submit-button">
           Add Creator
         </button>
       </form>

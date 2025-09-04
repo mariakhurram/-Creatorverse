@@ -5,9 +5,13 @@ import { supabase } from "../client";
 const EditCreator = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+ 
+  // Update state to match the required fields for the form
   const [formData, setFormData] = useState({
     name: "",
-    url: "",
+    youtubeURL: "",
+    twitterURL: "",
+    instagramURL: "",
     description: "",
     imageURL: "",
   });
@@ -16,16 +20,29 @@ const EditCreator = () => {
   useEffect(() => {
     const fetchCreator = async () => {
       try {
+        // Fetch all the required fields, including the new social media URLs
         const { data, error } = await supabase
           .from("creators")
-          .select("name, url, description, imageURL")
+          .select("name, youtubeURL, twitterURL, instagramURL, description, imageURL")
           .eq("id", id)
           .single();
 
-        if (error) throw error;
-        setFormData(data);
+        if (error) {
+          throw error;
+        }
+
+        // Set the form data, handling null values gracefully
+        setFormData({
+          name: data.name || "",
+          youtubeURL: data.youtubeURL || "",
+          twitterURL: data.twitterURL || "",
+          instagramURL: data.instagramURL || "",
+          description: data.description || "",
+          imageURL: data.imageURL || "",
+        });
       } catch (err) {
         console.error("Error fetching creator:", err.message);
+        alert("Failed to load creator data.");
       } finally {
         setLoading(false);
       }
@@ -47,11 +64,15 @@ const EditCreator = () => {
         .update(formData)
         .eq("id", id);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
+
       alert("Creator updated successfully!");
-      navigate(`/view/${id}`);
+      navigate(`/creator/${id}`); // Corrected redirect path to the details page
     } catch (err) {
       console.error("Error updating creator:", err.message);
+      alert("Failed to update creator.");
     }
   };
 
@@ -64,80 +85,121 @@ const EditCreator = () => {
         .delete()
         .eq("id", id);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
+
       alert("Creator deleted successfully!");
-      navigate("/"); 
+      navigate("/"); // Redirect to the homepage after deletion
     } catch (err) {
       console.error("Error deleting creator:", err.message);
+      alert("Failed to delete creator.");
     }
   };
 
   if (loading) {
-    return <p className="text-center mt-10">Loading creator...</p>;
+    return <p className="text-center mt-10 text-white">Loading creator...</p>;
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-900 text-white p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md"
+        className="bg-gray-800 shadow-xl rounded-xl p-6 w-full max-w-md"
       >
-        <h2 className="text-xl font-bold mb-4">Edit Creator</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Edit Creator</h2>
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 mb-3 rounded"
-        />
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <input
-          type="url"
-          name="url"
-          placeholder="URL"
-          value={formData.url}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 mb-3 rounded"
-        />
+          <div>
+            <label className="block text-sm font-medium mb-1">Description</label>
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          required
-          className="w-full border p-2 mb-3 rounded"
-        />
+          <div>
+            <label className="block text-sm font-medium mb-1">Image URL</label>
+            <input
+              type="url"
+              name="imageURL"
+              placeholder="Image URL"
+              value={formData.imageURL}
+              onChange={handleChange}
+              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <input
-          type="text"
-          name="imageURL"
-          placeholder="Image URL (optional)"
-          value={formData.imageURL || ""}
-          onChange={handleChange}
-          className="w-full border p-2 mb-3 rounded"
-        />
+          <h3 className="text-lg font-semibold mt-6 mb-2">Social Media Links</h3>
+          <div>
+            <label className="block text-sm font-medium mb-1">YouTube URL</label>
+            <input
+              type="url"
+              name="youtubeURL"
+              placeholder="YouTube URL"
+              value={formData.youtubeURL}
+              onChange={handleChange}
+              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
- 
-        <button
-          type="submit"
-          className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 mb-3"
-        >
-          Update Creator
-        </button>
+          <div>
+            <label className="block text-sm font-medium mb-1">Twitter URL</label>
+            <input
+              type="url"
+              name="twitterURL"
+              placeholder="Twitter URL"
+              value={formData.twitterURL}
+              onChange={handleChange}
+              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
- 
-        <button
-          type="button"
-          onClick={handleDelete}
-          className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600"
-        >
-          Delete Creator
-        </button>
+          <div>
+            <label className="block text-sm font-medium mb-1">Instagram URL</label>
+            <input
+              type="url"
+              name="instagramURL"
+              placeholder="Instagram URL"
+              value={formData.instagramURL}
+              onChange={handleChange}
+              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <div className="mt-6 flex gap-4">
+          <button
+            type="submit"
+            className="flex-1 bg-blue-600 text-white py-2 rounded-md font-bold hover:bg-blue-700 transition-colors"
+          >
+            Update
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="flex-1 bg-red-600 text-white py-2 rounded-md font-bold hover:bg-red-700 transition-colors"
+          >
+            Delete
+          </button>
+        </div>
       </form>
     </div>
   );

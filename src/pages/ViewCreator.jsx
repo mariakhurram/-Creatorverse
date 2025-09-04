@@ -1,50 +1,55 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { supabase } from "../client";
 import ContentCreator from "../components/ContentCreator";
+import { Link } from "react-router-dom";
 
 const ViewCreator = () => {
-  const { id } = useParams();
-  const [creator, setCreator] = useState(null);
+  const [creators, setCreators] = useState([]);
   const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCreator = async () => {
+    const fetchCreators = async () => {
       try {
-        const { data, error } = await supabase
-          .from("creators") 
-          .select("name, url, description, imageURL") 
-          .eq("id", id) 
-          .single();
-
+        const { data, error } = await supabase.from("creators").select("*");
         if (error) throw error;
-        setCreator(data);
+        setCreators(data);
       } catch (err) {
-        console.error("Error fetching creator:", err.message);
+        console.error("Error fetching creators:", err.message);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchCreator();
-  }, [id]);
+    fetchCreators();
+  }, []);
 
   if (loading) {
-    return <p className="text-center mt-10">Loading creator...</p>;
+    return <p className="text-center mt-10 text-white">Loading creators...</p>;
   }
-
-  if (!creator) {
-    return <p className="text-center mt-10 text-gray-500">Creator not found.</p>;
+  
+  if (error) {
+    return<p className="text-center mt-10 text-red-500 text-xl">{error}</p>
   }
-
+  
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <ContentCreator
-        name={creator.name}
-        url={creator.url}
-        description={creator.description}
-        imageURL={creator.imageURL}
-      />
+    <div className="view-creator-page">
+    <div className="p-6 bg-gray-900 min-h-screen">
+      <h1 className="text"> CREATORVERSE</h1>
+      <div className="flex justify-center md:justify-start space-x-4 mb-8">
+        <Link
+          to="/"
+          className="button">
+          View All Creators
+        </Link>
+        <Link
+          to="/add"
+          className="button">
+          Add a Creator
+        </Link>
+      </div>
+    </div>
+
+      
     </div>
   );
 };
