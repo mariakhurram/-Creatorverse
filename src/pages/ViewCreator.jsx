@@ -34,10 +34,10 @@ const [error, setError] = useState(null);
   return (
     <div className="view-creator-page">
     <div className="p-6 bg-gray-900 min-h-screen">
-      <h1 className="text"> CREATORVERSE</h1>
+      <h1 className="text-3"> CREATORVERSE</h1>
       <div className="flex justify-center md:justify-start space-x-4 mb-8">
         <Link
-          to="/"
+          to="/creators"
           className="button">
           View All Creators
         </Link>

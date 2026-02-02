@@ -105,13 +105,13 @@ const EditCreator = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-900 text-white p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-800 shadow-xl rounded-xl p-6 w-full max-w-md"
+        className="form bg-gray-800 shadow-xl rounded-xl p-6 w-full max-w-md"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Edit Creator</h2>
+        <h2 className="text font-bold mb-6 text-center">Edit Creator</h2>
 
-        <div className="space-y-4">
+        <div className="margin space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+            <label className="block text-1 font-medium mb-1"> Name</label>
             <input
               type="text"
               name="name"
@@ -119,76 +119,76 @@ const EditCreator = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="padding w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
+            <label className="block text-1 font-medium mb-1">Description</label>
             <textarea
               name="description"
               placeholder="Description"
               value={formData.description}
               onChange={handleChange}
               required
-              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="padding w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Image URL</label>
+            <label className="block text-1 font-medium mb-1">Image URL</label>
             <input
               type="url"
               name="imageURL"
               placeholder="Image URL"
               value={formData.imageURL}
               onChange={handleChange}
-              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="padding w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          <h3 className="text-lg font-semibold mt-6 mb-2">Social Media Links</h3>
+          <h3 className="font text-lg font-semibold mt-6 mb-2">Social Media Links</h3>
           <div>
-            <label className="block text-sm font-medium mb-1">YouTube URL</label>
+            <label className="block text-1 font-medium mb-1">YouTube URL</label>
             <input
               type="url"
               name="youtubeURL"
               placeholder="YouTube URL"
               value={formData.youtubeURL}
               onChange={handleChange}
-              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="padding w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Twitter URL</label>
+            <label className="block text-1 font-medium mb-1">Twitter URL</label>
             <input
               type="url"
               name="twitterURL"
               placeholder="Twitter URL"
               value={formData.twitterURL}
               onChange={handleChange}
-              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="padding w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Instagram URL</label>
+            <label className="block text-1 font-medium mb-1">Instagram URL</label>
             <input
               type="url"
               name="instagramURL"
               placeholder="Instagram URL"
               value={formData.instagramURL}
               onChange={handleChange}
-              className="w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="padding w-full bg-gray-700 text-white border-gray-600 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
-        <div className="mt-6 flex gap-4">
+        <div className="space mt-6 flex gap-4">
           <button
             type="submit"
-            className="flex-1 bg-blue-600 text-white py-2 rounded-md font-bold hover:bg-blue-700 transition-colors"
+            className="right flex-1 bg-blue-600 text-white py-2 rounded-md font-bold hover:bg-blue-700 transition-colors"
           >
             Update
           </button>

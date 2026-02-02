@@ -7,7 +7,7 @@ const ContentCreator = ({ creator }) => {
 
   return (
     <div className="relative bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-      <Link to={`/creator/${id}`}>
+      <Link to={`/edit/${id}`}>
         <img
           src={imageURL}
           alt={name}

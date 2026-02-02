@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "../client";
 import { FaYoutube, FaTwitter, FaInstagram, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
+import ContentCreator from "../components/ContentCreator";
 
 const ShowCreators = () => {
   const { id } = useParams();
@@ -16,8 +17,8 @@ const ShowCreators = () => {
         const { data, error } = await supabase
           .from("creators")
           .select()
-          .eq("id", id)
-          .single();
+          // .eq("id", id)
+          // .single();
 
         if (error) {
           throw error;
@@ -67,11 +68,13 @@ const ShowCreators = () => {
   if (error) {
     return <p className="text-center mt-10 text-red-500 text-xl">{error}</p>;
   }
+console.log(creator);
 
   return (
     <div className="show-creator-page">
-      <div className="creator-details-container">
-        <img
+     
+        {creator.map((c)=>(<div className="creator-details-container"><ContentCreator creator={c}></ContentCreator></div>))}
+         {/* <img
           src={creator.imageURL || 'https://via.placeholder.com/200x200.png?text=No+Image'}
           alt={creator.name}
         />
@@ -108,9 +111,9 @@ const ShowCreators = () => {
             >
               <FaTrashAlt /> Delete
             </button>
-          </div>
-        </div>
-      </div>
+          </div> */}
+        {/* </div> */}
+  
     </div>
   );
 };

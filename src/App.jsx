@@ -13,7 +13,7 @@ import "./App.css";
     <div className="App">
       <Routes>
         <Route path="/" element={<ViewCreator/>}/>
-        <Route path="/creators" element={<ViewCreator/>}/>
+        <Route path="/creators" element={<ShowCreators/>}/>
         <Route path="/creator/:id" element={<ShowCreators/>}/>
         <Route path="/add" element={<AddCreator/>}/>
         <Route path="/edit/:id" element={<EditCreator/>}/>
